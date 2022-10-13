@@ -2,6 +2,7 @@ import Phaser from "phaser";
 
 export default class HelloWorldScene extends Phaser.Scene {
   private platforms?: Phaser.Physics.Arcade.StaticGroup
+  private player?: Phaser.Physics.Arcade.Sprite
 
   constructor() {
     super("hello-world");
@@ -29,6 +30,34 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.platforms.create(600, 400, 'ground')
     this.platforms.create(50, 250, 'ground')
     this.platforms.create(750, 220, 'ground')
+    //creiamo il personaggio 
+    this.player = this.physics.add.sprite(100, 450, 'dude')
+    this.player.setBounce(0.2)
+    this.player.setCollideWorldBounds(true)
+    // i frames da 0 a 3 sono dedicati al movimento a sinistra
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('dude', {
+        start: 0, end: 3
+      }),
+      frameRate: 10,
+      repeat: -1
+    })
+    //il frame 4 è dedicato alla telecamera 
+    this.anims.create({
+      key: 'turn',
+      frames: [{ key: 'dude', frame: 4 }],
+      frameRate: 20
+    })
+    // i frames da 6 a 8 sono dedicati al movimento a destra
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('dude', {
+        start: 5, end: 8
+      }),
+      frameRate: 10,
+      repeat: -1
+    })
   }
 
   update() {

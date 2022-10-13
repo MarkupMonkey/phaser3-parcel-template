@@ -6,6 +6,9 @@ export default class HelloWorldScene extends Phaser.Scene {
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
   private stars?: Phaser.Physics.Arcade.Group
 
+  private score = 0
+  private scoreText?: Phaser.GameObjects.Text
+
   constructor() {
     super("hello-world");
   }
@@ -78,11 +81,20 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     this.physics.add.collider(this.stars, this.platforms)
     this.physics.add.overlap(this.player, this.stars, this.handleCollectStar, undefined, this)
+
+    this.scoreText = this.add.text(16, 16, 'score: 0', {
+      fontSize: '32px',
+      color: 'purple',
+      fontStyle: 'bolder'
+    })
   }
 
   private handleCollectStar(player: Phaser.GameObjects.GameObject, s: Phaser.GameObjects.GameObject) {
     const star = s as Phaser.Physics.Arcade.Image
     star.disableBody(true, true)
+
+    this.score += 10
+    this.scoreText?.setText(`Score : ${this.score}`)
   }
 
   update() {
